@@ -1,222 +1,215 @@
-﻿namespace Assignment03
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Assignment03
     {
     internal class Program
         {
         static void Main( string[] args )
             {
-            Exercise1();
-            Console.WriteLine(new string('-', 50));
-
-            Exercise2();
-            Console.WriteLine(new string('-', 50));
-
-            Exercise3();
-            Console.WriteLine(new string('-', 50));
-
-            Exercise4();
-            Console.WriteLine(new string('-', 50));
-
-            Exercise5();
-            Console.WriteLine(new string('-', 50));
-
-            Exercise6();
+            Ex1();
+            Ex2();
+            Ex3();
+            Ex4();
+            Ex5();
+            Ex6();
             }
 
-        static void Exercise1()
+        static void PrintTitle( string title )
             {
-            Console.WriteLine("Exercise 1: Student Grade Manager");
+            Console.WriteLine("\n" + title);
+            Console.WriteLine(new string('-', 40));
+            }
+
+        // ============================
+        // Ex1
+        // ============================
+        static void Ex1()
+            {
+            PrintTitle("Ex1");
 
             List<int> grades = new List<int> { 85, 92, 78, 95, 88, 70, 100, 65 };
 
             Console.WriteLine("Grades: " + string.Join(", ", grades));
             Console.WriteLine("Count: " + grades.Count);
-            Console.WriteLine("First Grade: " + grades.First());
-            Console.WriteLine("Last Grade: " + grades.Last());
+            Console.WriteLine("First: " + grades.First());
+            Console.WriteLine("Last: " + grades.Last());
 
             grades.Sort();
-            Console.WriteLine("Sorted Grades: " + string.Join(", ", grades));
+            Console.WriteLine("Sorted: " + string.Join(", ", grades));
 
-            int firstAbove90 = grades.FirstOrDefault(g => g > 90);
-            Console.WriteLine("First Grade Above 90: " + firstAbove90);
+            Console.WriteLine("First > 90: " + grades.FirstOrDefault(g => g > 90));
 
-            List<int> failingGrades = grades.Where(g => g < 75).ToList();
-            Console.WriteLine("Failing Grades: " + string.Join(", ", failingGrades));
+            var failing = grades.Where(g => g < 75).ToList();
+            Console.WriteLine("Failing: " + string.Join(", ", failing));
 
             grades.RemoveAll(g => g < 75);
-            Console.WriteLine("After Removing Failing Grades: " + string.Join(", ", grades));
+            Console.WriteLine("After Remove: " + string.Join(", ", grades));
 
-            bool has100 = grades.Any(g => g == 100);
-            Console.WriteLine("Any Grade Equals 100: " + has100);
+            Console.WriteLine("Has 100: " + grades.Contains(100));
 
-            List<string> gradeStrings = grades.Select(g => $"Grade: {g}").ToList();
-            Console.WriteLine("String List: " + string.Join(" | ", gradeStrings));
+            var strings = grades.Select(g => $"Grade: {g}");
+            Console.WriteLine(string.Join(" | ", strings));
             }
 
-        static void Exercise2()
+        // ============================
+        // Ex2
+        // ============================
+        static void Ex2()
             {
-            Console.WriteLine("Exercise 2: Leaderboard");
+            PrintTitle("Ex2");
 
-            SortedDictionary<int, string> leaderboard = new SortedDictionary<int, string>
+            var leaderboard = new SortedDictionary<int, string>
             {
-                { 500, "Ahmed" },
-                { 200, "Sara" },
-                { 800, "Ali" },
-                { 350, "Mona" }
+                {500, "Abdo"},
+                {200, "Tamer"},
+                {800, "Mahmoud"},
+                {350, "Emam"}
             };
 
             foreach ( var item in leaderboard )
-                {
                 Console.WriteLine($"{item.Key} = {item.Value}");
-                }
 
             Console.WriteLine("First Key: " + leaderboard.First().Key);
             Console.WriteLine("First Value: " + leaderboard.First().Value);
 
-            Console.WriteLine("Score 500 Exists: " + leaderboard.ContainsKey(500));
+            Console.WriteLine("Has 500: " + leaderboard.ContainsKey(500));
 
-            if ( leaderboard.TryGetValue(999, out string player) )
-                Console.WriteLine("Player with 999: " + player);
+            if ( leaderboard.TryGetValue(999, out var player) )
+                Console.WriteLine(player);
             else
-                Console.WriteLine("Player with 999: Not Found");
+                Console.WriteLine("Not Found");
 
             leaderboard.Remove(200);
 
-            Console.WriteLine("After Removing Score 200:");
+            Console.WriteLine("After Remove:");
             foreach ( var item in leaderboard )
-                {
                 Console.WriteLine($"{item.Key} = {item.Value}");
-                }
             }
 
-        static void Exercise3()
+        // ============================
+        // Ex3
+        // ============================
+        static void Ex3()
             {
-            Console.WriteLine("Exercise 3: Phone Book");
+            PrintTitle("Ex3");
 
-            Dictionary<string, string> phoneBook = new Dictionary<string, string>
+            var phoneBook = new Dictionary<string, string>
             {
-                { "Ahmed", "01011111111" },
-                { "Sara", "01022222222" },
-                { "Ali", "01033333333" },
-                { "Mona", "01044444444" }
+                {"Abdo", "01011111111"},
+                {"Tamer", "01022222222"},
+                {"Mahmoud", "01033333333"},
+                {"Emam", "01044444444"}
             };
 
-            phoneBook["Omar"] = "01055555555";
-            phoneBook["Ahmed"] = "01099999999";
+            phoneBook["Abdo"] = "01099999999";
 
             try
                 {
-                phoneBook.Add("Sara", "01000000000");
+                phoneBook.Add("Abdo", "000");
                 }
             catch ( Exception ex )
                 {
-                Console.WriteLine("Add Error: " + ex.Message);
+                Console.WriteLine("Error: " + ex.Message);
                 }
 
-            bool added = phoneBook.TryAdd("Ali", "01111111111");
-            Console.WriteLine("TryAdd Ali Succeeded: " + added);
+            Console.WriteLine("TryAdd: " + phoneBook.TryAdd("Tamer", "111"));
 
-            if ( phoneBook.ContainsKey("Nour") )
-                Console.WriteLine("Nour: " + phoneBook["Nour"]);
-            else
-                Console.WriteLine("Nour: Contact does not exist");
+            Console.WriteLine(phoneBook.ContainsKey("Ali") ? "Found" : "Not Found");
 
-            string result = phoneBook.GetValueOrDefault("Khaled", "Not Found");
-            Console.WriteLine("Khaled: " + result);
+            Console.WriteLine(phoneBook.GetValueOrDefault("Ali", "Not Found"));
 
-            Console.WriteLine("Keys: " + string.Join(" ", phoneBook.Keys));
-            Console.WriteLine("Values: " + string.Join(" ", phoneBook.Values));
+            Console.WriteLine("Keys: " + string.Join(", ", phoneBook.Keys));
+            Console.WriteLine("Values: " + string.Join(", ", phoneBook.Values));
             }
 
-        static void Exercise4()
+        // ============================
+        // Ex4
+        // ============================
+        static void Ex4()
             {
-            Console.WriteLine("Exercise 4: Unique Email Validator");
+            PrintTitle("Ex4");
 
-            HashSet<string> emails = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var emails = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "abdo@test.com",
+                "ABDO@test.com",
+                "tamer@test.com",
+                "Tamer@Test.Com"
+            };
 
-            emails.Add("ahmed@test.com");
-            emails.Add("AHMED@test.com");
-            emails.Add("sara@test.com");
-            emails.Add("Sara@Test.Com");
+            Console.WriteLine("Count: " + emails.Count);
 
-            Console.WriteLine("Stored Emails Count: " + emails.Count);
-            Console.WriteLine("Stored Emails: " + string.Join(", ", emails));
-            Console.WriteLine("Reason: HashSet is case-insensitive, so duplicate emails are counted once.");
+            var A = new HashSet<int> { 1, 2, 3, 4, 5 };
+            var B = new HashSet<int> { 4, 5, 6, 7, 8 };
 
-            HashSet<int> setA = new HashSet<int> { 1, 2, 3, 4, 5 };
-            HashSet<int> setB = new HashSet<int> { 4, 5, 6, 7, 8 };
+            var union = new HashSet<int>(A);
+            union.UnionWith(B);
+            Console.WriteLine("Union: " + string.Join(", ", union));
 
-            HashSet<int> union = new HashSet<int>(setA);
-            union.UnionWith(setB);
-            Console.WriteLine("UnionWith: " + string.Join(", ", union));
+            var inter = new HashSet<int>(A);
+            inter.IntersectWith(B);
+            Console.WriteLine("Intersect: " + string.Join(", ", inter));
 
-            HashSet<int> intersect = new HashSet<int>(setA);
-            intersect.IntersectWith(setB);
-            Console.WriteLine("IntersectWith: " + string.Join(", ", intersect));
+            var except = new HashSet<int>(A);
+            except.ExceptWith(B);
+            Console.WriteLine("Except: " + string.Join(", ", except));
 
-            HashSet<int> except = new HashSet<int>(setA);
-            except.ExceptWith(setB);
-            Console.WriteLine("ExceptWith: " + string.Join(", ", except));
-
-            HashSet<int> smallSet = new HashSet<int> { 1, 2 };
-            Console.WriteLine("{1,2} Is Subset Of Set A: " + smallSet.IsSubsetOf(setA));
+            Console.WriteLine("{1,2} subset of A: " + new HashSet<int> { 1, 2 }.IsSubsetOf(A));
             }
 
-        static void Exercise5()
+        // ============================
+        // Ex5
+        // ============================
+        static void Ex5()
             {
-            Console.WriteLine("Exercise 5: Print Queue Simulator");
+            PrintTitle("Ex5");
 
-            Queue<string> printQueue = new Queue<string>();
-            printQueue.Enqueue("Report.pdf");
-            printQueue.Enqueue("Invoice.pdf");
-            printQueue.Enqueue("Letter.docx");
-            printQueue.Enqueue("Resume.pdf");
-            printQueue.Enqueue("Photo.jpg");
+            var queue = new Queue<string>();
 
-            Console.WriteLine("Queue: " + string.Join(", ", printQueue));
-            Console.WriteLine("Count: " + printQueue.Count);
+            queue.Enqueue("Report.pdf");
+            queue.Enqueue("Invoice.pdf");
+            queue.Enqueue("Letter.docx");
+            queue.Enqueue("Resume.pdf");
+            queue.Enqueue("Photo.jpg");
 
-            Console.WriteLine("Next Document: " + printQueue.Peek());
+            Console.WriteLine("Queue: " + string.Join(", ", queue));
+            Console.WriteLine("Count: " + queue.Count);
 
-            while ( printQueue.Count > 0 )
-                {
-                string doc = printQueue.Dequeue();
-                Console.WriteLine("Printing: " + doc);
-                }
+            Console.WriteLine("Next: " + queue.Peek());
 
-            bool success = printQueue.TryDequeue(out string emptyDoc);
-            Console.WriteLine("TryDequeue Success: " + success);
-            Console.WriteLine("Value: " + ( emptyDoc ?? "null" ));
+            while ( queue.Count > 0 )
+                Console.WriteLine("Printing: " + queue.Dequeue());
+
+            Console.WriteLine("TryDequeue: " + queue.TryDequeue(out var x));
             }
 
-        static void Exercise6()
+        // ============================
+        // Ex6
+        // ============================
+        static void Ex6()
             {
-            Console.WriteLine("Exercise 6: Browser History");
+            PrintTitle("Ex6");
 
-            Stack<string> history = new Stack<string>();
-            history.Push("google.com");
-            history.Push("github.com");
-            history.Push("stackoverflow.com");
-            history.Push("youtube.com");
-            history.Push("claude.ai");
+            var stack = new Stack<string>();
 
-            Console.WriteLine("Current Page: " + history.Peek());
+            stack.Push("google.com");
+            stack.Push("github.com");
+            stack.Push("stackoverflow.com");
+            stack.Push("youtube.com");
+            stack.Push("claude.ai");
+
+            Console.WriteLine("Current: " + stack.Peek());
 
             for ( int i = 0; i < 3; i++ )
-                {
-                if ( history.Count > 0 )
-                    {
-                    string leftPage = history.Pop();
-                    Console.WriteLine("Leaving Page: " + leftPage);
-                    }
-                }
+                Console.WriteLine("Back from: " + stack.Pop());
 
-            if ( history.Count > 0 )
-                Console.WriteLine("Current Page After Back: " + history.Peek());
+            Console.WriteLine("Now at: " + stack.Peek());
 
-            history.Clear();
-            bool popped = history.TryPop(out string page);
-            Console.WriteLine("TryPop Success: " + popped);
-            Console.WriteLine("Value: " + ( page ?? "null" ));
+            stack.Clear();
+
+            Console.WriteLine("TryPop: " + stack.TryPop(out var page));
             }
         }
     }
